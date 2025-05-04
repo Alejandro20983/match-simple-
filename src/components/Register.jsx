@@ -13,6 +13,9 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    setError("");
+    setMessage("");
+
     if (!email || !password || !confirmPassword) {
       setError("Todos los campos son obligatorios.");
       return;
@@ -24,22 +27,19 @@ const Register = () => {
     }
 
     try {
-      // Registra el nuevo usuario con email y contraseña
-      const { user, error: signupError } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
       });
 
-      if (signupError) {
-        setError(`Error al registrar el usuario: ${signupError.message}`);
+      if (signUpError) {
+        setError(`Error al registrar el usuario: ${signUpError.message}`);
         return;
       }
 
-      // Si el registro es exitoso, redirige directamente a la creación de perfil
-      setMessage("Cuenta creada exitosamente. Redirigiendo a crear tu perfil...");
-      
-      // Aquí rediriges al usuario a la página de creación de perfil
+      setMessage("Cuenta creada exitosamente. Redirigiendo...");
       navigate("/profilecreation");
+
     } catch (err) {
       setError(`Algo salió mal: ${err.message || err}`);
     }
@@ -73,12 +73,15 @@ const Register = () => {
           style={styles.input}
           required
         />
+
         {error && <p style={styles.error}>{error}</p>}
         {message && <p style={styles.success}>{message}</p>}
+
         <button type="submit" style={styles.button}>
           Registrarse
         </button>
       </form>
+
       <p style={styles.link}>
         ¿Ya tienes cuenta?{" "}
         <span onClick={() => navigate("/login")} style={styles.loginLink}>

@@ -19,13 +19,19 @@ const ProfileCreation = () => {
 
   // UseEffect para obtener el usuario autenticado
   useEffect(() => {
-    const user = supabase.auth.user();
-    if (user) {
-      setUser(user);
-      setUserId(user.id); // Almacenamos el userId
-    } else {
-      setError("No estás autenticado.");
-    }
+    const getUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        setError("Error al obtener el usuario: " + error.message);
+      } else if (user) {
+        setUser(user);
+        setUserId(user.id); // Almacenamos el userId
+      } else {
+        setError("No estás autenticado.");
+      }
+    };
+
+    getUser();
   }, []);
 
   const handleImageChange = (e, photoNum) => {
