@@ -47,7 +47,6 @@ const Register = () => {
 
       setMessage("📧 Revisa tu correo para continuar con el registro.");
       setError("");
-
     } catch (err) {
       setError(`Algo salió mal: ${err.message || err}`);
     }

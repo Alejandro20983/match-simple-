@@ -10,8 +10,8 @@ const LikePage = () => {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  useEffect(() => {
-    // Crear un ID anónimo fijo si no existe
+  // Función para manejar la creación del ID anónimo y cargar usuarios
+  const handleStart = () => {
     let storedId = localStorage.getItem("anonymous_user_id");
     if (!storedId) {
       storedId = crypto.randomUUID();
@@ -19,7 +19,7 @@ const LikePage = () => {
     }
     setUserId(storedId);
     fetchUsers(storedId);
-  }, []);
+  };
 
   const fetchUsers = async (currentUserId) => {
     setLoading(true);
@@ -65,13 +65,11 @@ const LikePage = () => {
       .single();
 
     if (data) {
-      await supabase.from('matches').insert([
-        {
-          user1_id: userId1,
-          user2_id: userId2,
-          match_date: new Date().toISOString(),
-        },
-      ]);
+      await supabase.from('matches').insert([{
+        user1_id: userId1,
+        user2_id: userId2,
+        match_date: new Date().toISOString(),
+      }]);
       alert('¡Match encontrado!');
       navigate('/match');
     }
@@ -80,6 +78,9 @@ const LikePage = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Perfiles</h1>
+      <button onClick={handleStart} style={styles.button}>
+        Empezar
+      </button>
       <div style={styles.card}>
         {loading ? (
           <p>Cargando...</p>
@@ -121,9 +122,6 @@ const LikePage = () => {
     </div>
   );
 };
-
-// ... tus estilos quedan igual ...
-
 
 const styles = {
   container: {
@@ -195,6 +193,17 @@ const styles = {
   },
   error: {
     color: 'red',
+  },
+  button: {
+    padding: '0.75rem',
+    backgroundColor: '#004aad',
+    color: 'white',
+    fontWeight: 'bold',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    marginBottom: '2rem',
   },
 };
 

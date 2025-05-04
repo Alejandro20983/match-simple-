@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
@@ -16,30 +16,6 @@ const ProfileCreation = () => {
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (data?.user) {
-        setUser(data.user);
-
-        const { data: accountData, error: accountError } = await supabase
-          .from("accounts")
-          .select("id")
-          .eq("email", data.user.email)
-          .single();
-
-        if (accountError) {
-          setError("Error al obtener el usuario desde la base de datos.");
-        } else {
-          setUserId(accountData.id);
-        }
-      } else {
-        setError("Usuario no autenticado.");
-      }
-    };
-    fetchUser();
-  }, []);
 
   const handleImageChange = (e, photoNum) => {
     const file = e.target.files[0];

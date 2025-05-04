@@ -214,28 +214,26 @@ const styles = {
     fontSize: "1rem",
     marginTop: "1rem",
   },
-  // Media queries for responsiveness
-  '@media (max-width: 768px)': {
-    form: {
-      padding: '1rem',
-      maxWidth: '90%',
-    },
-    input: {
-      fontSize: '0.9rem',
-      padding: '0.6rem',
-    },
+  imageContainer: {
+    display: "flex",
+    gap: "1rem",
   },
-  '@media (max-width: 480px)': {
-    form: {
-      padding: '0.5rem',
-      maxWidth: '100%',
-    },
-    input: {
-      fontSize: '0.8rem',
-      padding: '0.5rem',
-    },
+  imageBox: {
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  image: {
+    width: "150px",
+    height: "150px",
+    objectFit: "cover",
+    borderRadius: "8px",
+  },
+  label: {
+    color: "white",
+    marginBottom: "0.5rem",
   },
 };
-
 
 export default EditProfile;

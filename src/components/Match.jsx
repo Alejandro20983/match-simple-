@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -11,6 +11,7 @@ const MatchPageList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Función para obtener el ID de cuenta basado en el correo electrónico
   const fetchAccountId = async (userEmail) => {
     const { data, error } = await supabase
       .from("accounts")
@@ -21,6 +22,7 @@ const MatchPageList = () => {
     return data.id;
   };
 
+  // Cargar los matches al montar el componente
   useEffect(() => {
     const loadMatches = async () => {
       try {
@@ -67,7 +69,7 @@ const MatchPageList = () => {
         setMatches(enriched);
       } catch (err) {
         console.error(err);
-        setError(err.message || "Error al cargar matches");
+        setError(err.message || "Error al cargar los matches");
       } finally {
         setLoading(false);
       }
@@ -92,7 +94,7 @@ const MatchPageList = () => {
         <div style={styles.lastMatch}>
           <h2 style={{ marginBottom: "0.5rem" }}>Último match:</h2>
           <p>
-            <strong>{lastMatchProfile.nombre}</strong> — ¡Connect!
+            <strong>{lastMatchProfile.nombre}</strong> — ¡Conéctate!
           </p>
         </div>
       )}
