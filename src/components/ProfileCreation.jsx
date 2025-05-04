@@ -14,8 +14,6 @@ const ProfileCreation = () => {
   const [instagram, setInstagram] = useState("");
   const [telefono, setTelefono] = useState("");
   const [error, setError] = useState("");
-  const [user, setUser] = useState(null);
-  const [userId, setUserId] = useState(null);
 
   const handleImageChange = (e, photoNum) => {
     const file = e.target.files[0];
