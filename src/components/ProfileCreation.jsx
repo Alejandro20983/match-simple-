@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
@@ -14,6 +14,19 @@ const ProfileCreation = () => {
   const [instagram, setInstagram] = useState("");
   const [telefono, setTelefono] = useState("");
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null); // Define el estado del usuario
+  const [userId, setUserId] = useState(null); // Define el estado del userId
+
+  // UseEffect para obtener el usuario autenticado
+  useEffect(() => {
+    const user = supabase.auth.user();
+    if (user) {
+      setUser(user);
+      setUserId(user.id); // Almacenamos el userId
+    } else {
+      setError("No estás autenticado.");
+    }
+  }, []);
 
   const handleImageChange = (e, photoNum) => {
     const file = e.target.files[0];
@@ -58,20 +71,18 @@ const ProfileCreation = () => {
       const imagenPerfil =
         mainPhoto === "photo1" ? photo1Path : mainPhoto === "photo2" ? photo2Path : photo1Path;
 
-      const { error: insertError } = await supabase.from("user_profiles").upsert([
-        {
-          user_id: userId,
-          nombre,
-          edad,
-          biografia,
-          hijos,
-          ciudad,
-          instagram,
-          telefono,
-          imagen_perfil: imagenPerfil || null,
-          fotos_adicionales: photo1Path && photo2Path ? [photo1Path, photo2Path] : null,
-        },
-      ]);
+      const { error: insertError } = await supabase.from("user_profiles").upsert([{
+        user_id: userId,
+        nombre,
+        edad,
+        biografia,
+        hijos,
+        ciudad,
+        instagram,
+        telefono,
+        imagen_perfil: imagenPerfil || null,
+        fotos_adicionales: photo1Path && photo2Path ? [photo1Path, photo2Path] : null,
+      }]);
 
       if (insertError) throw new Error("Error al guardar los datos: " + insertError.message);
 
