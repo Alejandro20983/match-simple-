@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { supabase } from './supabaseClient';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // Páginas de usuario
 import Login from './components/Login';
