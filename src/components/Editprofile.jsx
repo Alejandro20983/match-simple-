@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Necesitamos usar el hook useNavigate para la navegación
 
 const EditProfile = () => {
