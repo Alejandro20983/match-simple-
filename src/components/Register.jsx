@@ -27,13 +27,25 @@ const Register = () => {
     }
 
     try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
+      // Registro del usuario sin requerir confirmación de correo
+      const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: null,
+        },
       });
 
       if (signUpError) {
         setError(`Error al registrar el usuario: ${signUpError.message}`);
+        return;
+      }
+
+      // Intentamos obtener sesión inmediatamente
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        setError("Registro exitoso, pero no hay sesión activa.");
         return;
       }
 
