@@ -24,29 +24,22 @@ const Register = () => {
     }
 
     try {
-      const { error: insertError } = await supabase
-        .from("accounts")
-        .insert([{ email, password }]);
-
-      if (insertError) {
-        setError(`Error al guardar los datos: ${insertError.message}`);
-        return;
-      }
-
-      const { error: authError } = await supabase.auth.signInWithOtp({
+      // Registra el nuevo usuario con email y contraseña
+      const { user, error: signupError } = await supabase.auth.signUp({
         email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/profilecreation`,
-        },
+        password,
       });
 
-      if (authError) {
-        setError(`Error al enviar el enlace mágico: ${authError.message}`);
+      if (signupError) {
+        setError(`Error al registrar el usuario: ${signupError.message}`);
         return;
       }
 
-      setMessage("📧 Revisa tu correo para continuar con el registro.");
-      setError("");
+      // Si el registro es exitoso, redirige directamente a la creación de perfil
+      setMessage("Cuenta creada exitosamente. Redirigiendo a crear tu perfil...");
+      
+      // Aquí rediriges al usuario a la página de creación de perfil
+      navigate("/profilecreation");
     } catch (err) {
       setError(`Algo salió mal: ${err.message || err}`);
     }
